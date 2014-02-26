@@ -6,8 +6,8 @@ public class MonsterField1 : MonoBehaviour {
 	public GameObject cardPrefab;
 	// Use this for initialization
 	void Start () {
-		currentCard = ((GameObject)Instantiate(cardPrefab, new Vector3(), Quaternion.Euler(new Vector3()))).GetComponent<Card>();
-		currentCard = new LOB002 ();
+		//currentCard = ((GameObject)Instantiate(cardPrefab, new Vector3(), Quaternion.Euler(new Vector3()))).GetComponent<Card>();
+		//currentCard = new LOB002 ();
 	}
 	
 	// Update is called once per frame
