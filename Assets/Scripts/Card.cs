@@ -8,10 +8,12 @@ public class Card : MonoBehaviour {
 	public event Summon SummonMonster;
 	public bool isSelected;
 	public bool isFirstPlayerCard;
+	public bool isOnMonsterZone;
 
 	// Use this for initialization
 	void Start () {
 		isSelected = false;
+		isOnMonsterZone = false;
 	}
 	
 	// Update is called once per frame
@@ -25,10 +27,16 @@ public class Card : MonoBehaviour {
 
 		var recCoordinates = Camera.main.WorldToScreenPoint(transform.position);
 		Rect buttonRect = new Rect(recCoordinates.x, Screen.height - recCoordinates.y, buttonWidth, buttonHeight);
-		if (isSelected) {
+		if (isSelected && !isOnMonsterZone) {
 			if (GUI.Button (buttonRect, "S")) {
 				SummonMonster (this);
 				isSelected = false;
+			}
+		}
+
+		if (isSelected && isOnMonsterZone) {
+			if(GUI.Button (buttonRect, "X")){
+				//sacrificar card
 			}
 		}
 	}

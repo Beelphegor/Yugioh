@@ -16,6 +16,8 @@ public class Player : MonoBehaviour {
 	public List<GameObject> monsterZones;
 	public bool isPlayerTurn;
 	public int monstersSummoned;
+	public List<Card> cardsOnMonsterZone;
+	public List<Card> cardsOnGraveyard;
 
 	// Use this for initialization
 	void Start () {
@@ -34,7 +36,7 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetKeyDown("d")){
-			if(isPlayerTurn){
+			if(isPlayerTurn && hand.GetComponent<Hand>().Cards.Count < 5){
 				Card card = deck.GetComponent<Deck>().Draw();
 				card.SummonMonster += OnMonsterSummon;
 				card.moveCardToHand(hand.GetComponent<Hand>());
