@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject hand;
 	public GameObject deck;
+	public GameObject fusionMonsterZone;
 	public GameObject field;
 	public GameObject monsterZone1;
 	public GameObject monsterZone2;
@@ -24,7 +25,9 @@ public class GameManager : MonoBehaviour {
 			monsterZone4,
 			monsterZone5
 		};
-		deck.GetComponent<Deck> ().InitializeWithRandomCards ();
+		var cards = GenerateCards ();
+		deck.GetComponent<Deck> ().CreateDeck (cards.Where(x => x.type == "Normal monster").ToList());
+		fusionMonsterZone.GetComponent<FusionMonsterZone>().CreateDeck (cards.Where(x => x.type == "Fusion monster").ToList());
 	}
 	
 	// Update is called once per frame
@@ -42,5 +45,16 @@ public class GameManager : MonoBehaviour {
 		availableMonsterZone.GetComponent<MonsterZone>().isAvailable = false;
 		card.moveCardToMonsterZone (availableMonsterZone.transform.position);
 		Debug.Log ("click en: " + card.cardMetadata.name);
+	}
+
+	public List<CardMetadata> GenerateCards(){
+		return new List<CardMetadata> (){
+			new LOB002(),
+			new LOB001(),
+			new LOB000(),
+			new LOB003(),
+			new LOB005(),
+			new LOB004()
+		};
 	}
 }
