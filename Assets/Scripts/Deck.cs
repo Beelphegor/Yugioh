@@ -31,7 +31,7 @@ public class Deck : MonoBehaviour {
 	public void CreateDeck (List<CardMetadata> cardMetadataList)
 	{
 		foreach(var cardMetadata in cardMetadataList){
-			var card = ((GameObject)Instantiate(CardPrefab, new Vector3(18, -1, 0), Quaternion.Euler(new Vector3()))).GetComponent<Card>();
+			var card = ((GameObject)Instantiate(CardPrefab, transform.position, Quaternion.Euler(new Vector3()))).GetComponent<Card>();
 			card.cardMetadata = cardMetadata;
 			Cards.Add (card);
 		}

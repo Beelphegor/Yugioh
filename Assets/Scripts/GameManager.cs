@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour {
 		if(Input.GetKeyDown("d")){
 			Card card = deck.GetComponent<Deck>().Draw();
 			card.onClick += OnClickHandCard;
-			card.moveCardToHand(hand.GetComponent<Hand>().Cards.Count);
+			card.moveCardToHand(hand.GetComponent<Hand>());
 			hand.GetComponent<Hand>().Cards.Add (card);
 		}
 	}

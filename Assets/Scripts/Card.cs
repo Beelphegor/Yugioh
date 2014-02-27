@@ -7,6 +7,7 @@ public class Card : MonoBehaviour {
 	public delegate void clickCard(Card g);
 	public event clickCard onClick;
 	public bool isSelected;
+
 	// Use this for initialization
 	void Start () {
 		isSelected = false;
@@ -20,7 +21,9 @@ public class Card : MonoBehaviour {
 	{
 		float buttonHeight = 25;
 		float buttonWidth = 25;
-		Rect buttonRect = new Rect(0, Screen.height - buttonHeight * 3, buttonWidth, buttonHeight);
+
+		var recCoordinates = Camera.main.WorldToScreenPoint(transform.position);
+		Rect buttonRect = new Rect(recCoordinates.x, Screen.height - recCoordinates.y, buttonWidth, buttonHeight);
 		if (isSelected) {
 			if (GUI.Button (buttonRect, "M")) {
 				onClick (this);
@@ -31,19 +34,18 @@ public class Card : MonoBehaviour {
 	void OnMouseDown()
 	{
 		isSelected = true;
-
 	}
 
-	public void moveCardToHand (int cardsInHand)
+	public void moveCardToHand (Hand hand)
 	{
-		StartCoroutine (AnimateMovementToHand(cardsInHand));
+		StartCoroutine (AnimateMovementToHand(hand));
 	}
 
-	IEnumerator AnimateMovementToHand(int cardsInHand){
+	IEnumerator AnimateMovementToHand(Hand hand){
 		var initialPosition = transform.position;
 
 		for (float f = 0; f <= 1; f += 0.01f) {
-			transform.position = Vector3.Lerp (initialPosition, new Vector3 (-8 + transform.localScale.x * cardsInHand , -8, 0), f);
+			transform.position = Vector3.Lerp (initialPosition, new Vector3 (hand.transform.position.x - transform.localScale.x*2 + transform.localScale.x * (hand.Cards.Count - 1) , hand.transform.position.y, 0), f);
 			yield return null;
 		}
 
