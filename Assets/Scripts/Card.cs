@@ -6,10 +6,16 @@ public class Card : MonoBehaviour {
 	public CardMetadata cardMetadata;
 	public delegate void Summon(Card g);
 	public event Summon SummonMonster;
+    public delegate void Sacrifice(Card g);
+    public event Sacrifice SacrificeMonster;
+    public event Summon SacrificeMonsterSummon;
 	public bool isSelected;
 	public bool isFirstPlayerCard;
 	public bool isOnMonsterZone;
 	public bool isSacrificeable;
+    public bool cardWasMeantToBeSummon;
+    public bool doneSacrification;
+    public bool markedToSacrifice;
 
 	// Use this for initialization
 	void Start () {
@@ -37,10 +43,20 @@ public class Card : MonoBehaviour {
 		}
 
 		if (isSacrificeable) {
-			if(GUI.Button (buttonRect, "X")){
-				//sacrificar card
+			if(GUI.Button (buttonRect, "X"))
+			{
+			    SacrificeMonster(this);
 			}
 		}
+
+        if (doneSacrification && cardWasMeantToBeSummon)
+        {
+            if(GUI.Button(buttonRect, ":)"))
+            {
+                SacrificeMonsterSummon(this);
+                isSelected = false;
+            }
+        }
 	}
 	void OnMouseDown()
 	{
@@ -66,10 +82,10 @@ public class Card : MonoBehaviour {
 
 	public void moveCardToMonsterZone (Vector3 zonePosition)
 	{
-		StartCoroutine (AnimateMovementToMonsterZone1(zonePosition));
+		StartCoroutine (AnimateMovementToMonsterZone(zonePosition));
 	}
 
-	IEnumerator AnimateMovementToMonsterZone1 (Vector3 zonePosition)
+	IEnumerator AnimateMovementToMonsterZone (Vector3 zonePosition)
 	{
 		var initialPosition = transform.position;
 		
@@ -78,4 +94,25 @@ public class Card : MonoBehaviour {
 			yield return null;
 		}
 	}
+
+    public void moveCardToGraveyard(Vector3 zonePosition)
+    {
+        StartCoroutine(AnimateMovementToGraveyard(zonePosition));
+    }
+
+    IEnumerator AnimateMovementToGraveyard(Vector3 zonePosition)
+    {
+        var initialPosition = transform.position;
+
+        for (float f = 0; f <= 1; f += 0.01f)
+        {
+            transform.position = Vector3.Lerp(initialPosition, zonePosition, f);
+            yield return null;
+        }
+    }
+
+    public decimal GetMonstersNeededToSummon()
+    {
+        return cardMetadata.level < 5 ? 0 : cardMetadata.level < 7 ? 1 : 2;
+    }
 }
