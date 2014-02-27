@@ -4,6 +4,8 @@ using System.Collections;
 public class Card : MonoBehaviour {
 
 	public CardMetadata cardMetadata;
+	public delegate void clickCard(GameObject g);
+	public event clickCard onClick;
 
 	// Use this for initialization
 	void Start () {
@@ -13,6 +15,11 @@ public class Card : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+	}
+
+	void OnMouseDown()
+	{
+		onClick (gameObject);
 	}
 
 	public void moveCardToHand (int cardsInHand)
@@ -31,5 +38,9 @@ public class Card : MonoBehaviour {
 		Debug.Log ("destination reached");
 		var specificCardSprite = Resources.Load<Sprite>(cardMetadata.code);
 		transform.GetComponent<SpriteRenderer>().sprite = specificCardSprite;
+	}
+
+	IEnumerator AnimateCardToMonsterZone() {
+
 	}
 }

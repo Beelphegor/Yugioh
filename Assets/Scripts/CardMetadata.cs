@@ -6,4 +6,5 @@ public class CardMetadata {
 	public string name;
 	public int attack;
 	public int defense;
+	public string type;
 }

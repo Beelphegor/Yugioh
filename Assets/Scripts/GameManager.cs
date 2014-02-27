@@ -20,4 +20,5 @@ public class GameManager : MonoBehaviour {
 			hand.GetComponent<Hand>().Cards.Add (card);
 		}
 	}
+
 }
