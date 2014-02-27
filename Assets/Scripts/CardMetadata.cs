@@ -7,4 +7,9 @@ public class CardMetadata {
 	public int attack;
 	public int defense;
 	public string type;
+	public string attribute;
+	public int level;
+	public string cardType;
+	public string cardText;
+	public string rarity;
 }
