@@ -6,20 +6,32 @@ public class Card : MonoBehaviour {
 	public CardMetadata cardMetadata;
 	public delegate void clickCard(Card g);
 	public event clickCard onClick;
-
+	public bool isSelected;
 	// Use this for initialization
 	void Start () {
-	
+		isSelected = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
 	}
-
+	void OnGUI()
+	{
+		float buttonHeight = 25;
+		float buttonWidth = 25;
+		Rect buttonRect = new Rect(0, Screen.height - buttonHeight * 3, buttonWidth, buttonHeight);
+		if (isSelected) {
+			if (GUI.Button (buttonRect, "M")) {
+				onClick (this);
+				isSelected = false;
+			}
+		}
+	}
 	void OnMouseDown()
 	{
-		onClick (this);
+		isSelected = true;
+
 	}
 
 	public void moveCardToHand (int cardsInHand)
