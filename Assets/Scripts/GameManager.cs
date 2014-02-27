@@ -4,57 +4,36 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class GameManager : MonoBehaviour {
-
-	public GameObject hand;
-	public GameObject deck;
-	public GameObject fusionMonsterZone;
-	public GameObject field;
-	public GameObject monsterZone1;
-	public GameObject monsterZone2;
-	public GameObject monsterZone3;
-	public GameObject monsterZone4;
-	public GameObject monsterZone5;
-	public List<GameObject> monsterZones;
+	public GameObject player1;
+	public GameObject player2;
 
 	// Use this for initialization
 	void Start () {
-		monsterZones = new List<GameObject>(){
-			monsterZone1,
-			monsterZone2,
-			monsterZone3,
-			monsterZone4,
-			monsterZone5
-		};
-		var cards = GenerateCards ();
-		deck.GetComponent<Deck> ().CreateDeck (cards.Where(x => x.type == "Normal monster").ToList());
-		fusionMonsterZone.GetComponent<FusionMonsterZone>().CreateDeck (cards.Where(x => x.type == "Fusion monster").ToList());
+		SetPlayersTurn ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown("d")){
-			Card card = deck.GetComponent<Deck>().Draw();
-			card.onClick += OnClickHandCard;
-			card.moveCardToHand(hand.GetComponent<Hand>());
-			hand.GetComponent<Hand>().Cards.Add (card);
+	}
+
+	void OnGUI(){
+		float buttonHeight = 25;
+		float buttonWidth = 40;
+		
+		var recCoordinates = Camera.main.WorldToScreenPoint(transform.position);
+		Rect buttonRect = new Rect(recCoordinates.x, Screen.height - recCoordinates.y, buttonWidth, buttonHeight);
+		if (GUI.Button (buttonRect, "Next")) {
+			SetPlayersTurn();
 		}
 	}
 
-	void OnClickHandCard(Card card){
-		var availableMonsterZone = monsterZones.Where (x => x.GetComponent<MonsterZone> ().isAvailable).First ();
-		availableMonsterZone.GetComponent<MonsterZone>().isAvailable = false;
-		card.moveCardToMonsterZone (availableMonsterZone.transform.position);
-		Debug.Log ("click en: " + card.cardMetadata.name);
-	}
-
-	public List<CardMetadata> GenerateCards(){
-		return new List<CardMetadata> (){
-			new LOB002(),
-			new LOB001(),
-			new LOB000(),
-			new LOB003(),
-			new LOB005(),
-			new LOB004()
-		};
+	void SetPlayersTurn(){
+		if (!player1.GetComponent<Player> ().isPlayerTurn) {
+			player1.GetComponent<Player> ().isPlayerTurn = true;
+			player2.GetComponent<Player> ().isPlayerTurn = false;
+		} else {
+			player1.GetComponent<Player> ().isPlayerTurn = false;
+			player2.GetComponent<Player> ().isPlayerTurn = true;
+		}
 	}
 }

@@ -7,6 +7,7 @@ public class Card : MonoBehaviour {
 	public delegate void clickCard(Card g);
 	public event clickCard onClick;
 	public bool isSelected;
+	public bool isFirstPlayerCard;
 
 	// Use this for initialization
 	void Start () {
@@ -44,7 +45,7 @@ public class Card : MonoBehaviour {
 	IEnumerator AnimateMovementToHand(Hand hand){
 		var initialPosition = transform.position;
 
-		for (float f = 0; f <= 1; f += 0.01f) {
+		for (float f = 0; f <= 1; f += 0.1f) {
 			transform.position = Vector3.Lerp (initialPosition, new Vector3 (hand.transform.position.x - transform.localScale.x*2 + transform.localScale.x * (hand.Cards.Count - 1) , hand.transform.position.y, 0), f);
 			yield return null;
 		}
