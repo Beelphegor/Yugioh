@@ -15,6 +15,8 @@ public class Hand : MonoBehaviour {
 	}
 
 	void OnMouseEnter(){
-		Debug.Log ("your hand has " + Cards[0].cardMetadata.name + " cards" );
+		foreach (Card card in Cards) {
+			Debug.Log ("your hand has " + card.cardMetadata.name + " cards" );
+		}
 	}
 }
