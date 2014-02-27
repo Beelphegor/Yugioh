@@ -36,7 +36,7 @@ public class Card : MonoBehaviour {
 			}
 		}
 
-		if (isSelected && isSacrificeable) {
+		if (isSacrificeable) {
 			if(GUI.Button (buttonRect, "X")){
 				//sacrificar card
 			}
