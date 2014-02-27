@@ -15,6 +15,8 @@ public class Player : MonoBehaviour {
 	public GameObject monsterZone5;
 	public List<GameObject> monsterZones;
 	public bool isPlayerTurn;
+	public int monstersSummoned;
+
 	// Use this for initialization
 	void Start () {
 		monsterZones = new List<GameObject>(){
@@ -25,8 +27,8 @@ public class Player : MonoBehaviour {
 			monsterZone5
 		};
 		var cards = GenerateCards ();
-		deck.GetComponent<Deck> ().CreateDeckForPlayerOne (cards.Where(x => x.type == "Normal monster").ToList());
-		fusionMonsterZone.GetComponent<FusionMonsterZone>().CreateDeck (cards.Where(x => x.type == "Fusion monster").ToList());
+		deck.GetComponent<Deck> ().CreateDeckForPlayerOne (cards.Where(x => x.cardType == "Normal monster").ToList());
+		fusionMonsterZone.GetComponent<FusionMonsterZone>().CreateDeck (cards.Where(x => x.cardType == "Fusion monster").ToList());
 	}
 
 	// Update is called once per frame
@@ -34,7 +36,7 @@ public class Player : MonoBehaviour {
 		if(Input.GetKeyDown("d")){
 			if(isPlayerTurn){
 				Card card = deck.GetComponent<Deck>().Draw();
-				card.onClick += OnClickHandCard;
+				card.SummonMonster += OnMonsterSummon;
 				card.moveCardToHand(hand.GetComponent<Hand>());
 				hand.GetComponent<Hand>().Cards.Add (card);
 			} 
@@ -51,12 +53,19 @@ public class Player : MonoBehaviour {
 			new LOB004()
 		};
 	}
-	void OnClickHandCard(Card card){
-		if (isPlayerTurn) {
+	void OnMonsterSummon(Card card){
+		if (isPlayerTurn && isAllowedToSummonMonster (card)) {			
+			monstersSummoned++;
 			var availableMonsterZone = monsterZones.Where (x => x.GetComponent<MonsterZone> ().isAvailable).First ();
 			availableMonsterZone.GetComponent<MonsterZone> ().isAvailable = false;
 			card.moveCardToMonsterZone (availableMonsterZone.transform.position);
 			Debug.Log ("click en: " + card.cardMetadata.name);
+		} else {
+			Debug.Log ("cannot summon monster");
 		}
+	}
+
+	bool isAllowedToSummonMonster(Card card){
+		return monstersSummoned == 0 && card.cardMetadata.level < 5;
 	}
 }

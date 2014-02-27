@@ -4,8 +4,8 @@ using System.Collections;
 public class Card : MonoBehaviour {
 
 	public CardMetadata cardMetadata;
-	public delegate void clickCard(Card g);
-	public event clickCard onClick;
+	public delegate void Summon(Card g);
+	public event Summon SummonMonster;
 	public bool isSelected;
 	public bool isFirstPlayerCard;
 
@@ -26,8 +26,8 @@ public class Card : MonoBehaviour {
 		var recCoordinates = Camera.main.WorldToScreenPoint(transform.position);
 		Rect buttonRect = new Rect(recCoordinates.x, Screen.height - recCoordinates.y, buttonWidth, buttonHeight);
 		if (isSelected) {
-			if (GUI.Button (buttonRect, "M")) {
-				onClick (this);
+			if (GUI.Button (buttonRect, "S")) {
+				SummonMonster (this);
 				isSelected = false;
 			}
 		}

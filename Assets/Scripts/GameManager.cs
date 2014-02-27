@@ -30,10 +30,12 @@ public class GameManager : MonoBehaviour {
 	void SetPlayersTurn(){
 		if (!player1.GetComponent<Player> ().isPlayerTurn) {
 			player1.GetComponent<Player> ().isPlayerTurn = true;
+			player1.GetComponent<Player> ().monstersSummoned = 0;
 			player2.GetComponent<Player> ().isPlayerTurn = false;
 		} else {
 			player1.GetComponent<Player> ().isPlayerTurn = false;
 			player2.GetComponent<Player> ().isPlayerTurn = true;
+			player2.GetComponent<Player> ().monstersSummoned = 0;
 		}
 	}
 }

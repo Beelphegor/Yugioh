@@ -7,7 +7,8 @@ public class LOB000 : CardMetadata {
 		name = "Tri-Horned Dragon";
 		attack = 2850;
 		defense = 2350;
-		type = "Normal monster";
+		cardType = "Normal monster";
+		level = 8;
 	}
 }
 
@@ -17,7 +18,8 @@ public class LOB001 : CardMetadata {
 		name = "Blue-Eyes White Dragon";
 		attack = 3000;
 		defense = 2500;
-		type = "Normal monster";
+		cardType = "Normal monster";
+		level = 8;
 	}
 }
 
@@ -28,7 +30,8 @@ public class LOB002 : CardMetadata {
 		name = "Hitotsu-Me Giant";
 		attack = 1200;
 		defense = 1000;
-		type = "Normal monster";
+		cardType = "Normal monster";
+		level = 4;
 	}
 }
 
@@ -38,7 +41,8 @@ public class LOB003 : CardMetadata {
 		name = "Flame Swordsman";
 		attack = 1800;
 		defense = 1600;
-		type = "Fusion monster";
+		cardType = "Fusion monster";
+		level = 5;
 	}
 }
 
@@ -48,7 +52,8 @@ public class LOB004 : CardMetadata {
 		name = "Skull Servant";
 		attack = 300;
 		defense = 200;
-		type = "Normal monster";
+		cardType = "Normal monster";
+		level = 1;
 	}
 }
 
@@ -58,6 +63,7 @@ public class LOB005 : CardMetadata {
 		name = "Dark Magician";
 		attack = 2500;
 		defense = 2100;
-		type = "Normal monster";
+		cardType = "Normal monster";
+		level = 7;
 	}
 }
