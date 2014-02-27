@@ -56,18 +56,45 @@ public class Player : MonoBehaviour {
 		};
 	}
 	void OnMonsterSummon(Card card){
-		if (isPlayerTurn && isAllowedToSummonMonster (card)) {			
-			monstersSummoned++;
-			var availableMonsterZone = monsterZones.Where (x => x.GetComponent<MonsterZone> ().isAvailable).First ();
-			availableMonsterZone.GetComponent<MonsterZone> ().isAvailable = false;
-			card.moveCardToMonsterZone (availableMonsterZone.transform.position);
-			Debug.Log ("click en: " + card.cardMetadata.name);
+		if (isPlayerTurn){
+			if( isAllowedToSummonMonster (card)) {			
+				if( isLowLevelCard(card)){
+					monstersSummoned++;
+					cardsOnMonsterZone.Add(card);
+					card.isOnMonsterZone = true;
+					var availableMonsterZone = monsterZones.Where (x => x.GetComponent<MonsterZone> ().isAvailable).First ();
+					availableMonsterZone.GetComponent<MonsterZone> ().isAvailable = false;
+					card.moveCardToMonsterZone (availableMonsterZone.transform.position);
+					Debug.Log ("click en: " + card.cardMetadata.name);	
+				} else if(isMediumLevelCard(card) && cardsOnMonsterZone.Count > 0) {
+					AskForSacrifice();
+				} else if(isHighLevelCard(card) && cardsOnMonsterZone.Count > 1){
+					AskForSacrifice();
+				} else {
+					Debug.Log ("cannot summon that monster");
+				}
+			} 
 		} else {
 			Debug.Log ("cannot summon monster");
 		}
 	}
+	void AskForSacrifice(){
+		foreach (Card card in cardsOnMonsterZone) {
+			card.isSacrificeable = true;
+		}
+	}
+
+	bool isLowLevelCard(Card card){
+		return card.cardMetadata.level < 5;
+	}
+	bool isMediumLevelCard(Card card){
+		return card.cardMetadata.level >= 5 && card.cardMetadata.level <= 6;
+	}
+	bool isHighLevelCard(Card card){
+		return card.cardMetadata.level > 6;
+	}
 
 	bool isAllowedToSummonMonster(Card card){
-		return monstersSummoned == 0 && card.cardMetadata.level < 5;
+		return monstersSummoned == 0 ;
 	}
 }

@@ -9,11 +9,13 @@ public class Card : MonoBehaviour {
 	public bool isSelected;
 	public bool isFirstPlayerCard;
 	public bool isOnMonsterZone;
+	public bool isSacrificeable;
 
 	// Use this for initialization
 	void Start () {
 		isSelected = false;
 		isOnMonsterZone = false;
+		isSacrificeable = false;
 	}
 	
 	// Update is called once per frame
@@ -34,7 +36,7 @@ public class Card : MonoBehaviour {
 			}
 		}
 
-		if (isSelected && isOnMonsterZone) {
+		if (isSelected && isSacrificeable) {
 			if(GUI.Button (buttonRect, "X")){
 				//sacrificar card
 			}
