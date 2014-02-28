@@ -54,6 +54,7 @@ public class Player : MonoBehaviour {
             yield return new WaitForSeconds(0.4f);
         }
         InitialCardsDrawed();
+        hand.GetComponent<Hand>().OrderHand();
     }
 
     public void DrawCard(){
@@ -61,8 +62,9 @@ public class Player : MonoBehaviour {
 		card.SummonMonster += OnMonsterSummon;
 	    card.SacrificeMonster += OnSacrificeMonster;
 	    card.SacrificeMonsterSummon += OnSacrificeMonsterSummon;
-		card.moveCardToHand(hand.GetComponent<Hand>());
 		hand.GetComponent<Hand>().Cards.Add (card);
+        var specificCardSprite = Resources.Load<Sprite>(card.cardMetadata.code);
+        card.transform.GetComponent<SpriteRenderer>().sprite = specificCardSprite;
 	}
 
     // Update is called once per frame
@@ -113,7 +115,7 @@ public class Player : MonoBehaviour {
         card.isOnMonsterZone = true; //mejor si preguntamos al field si tiene esta carta
         var availableMonsterZone = monsterZones.First(x => x.GetComponent<MonsterZone>().isAvailable);
         availableMonsterZone.GetComponent<MonsterZone>().isAvailable = false;
-        hand.GetComponent<Hand>().Cards.Remove(card);
+        hand.GetComponent<Hand>().RemoveCard(card);
         card.moveCardToMonsterZone(availableMonsterZone.transform.position);
         Debug.Log("click en: " + card.cardMetadata.name);
         cardToBeSummon = null;
@@ -161,6 +163,7 @@ public class Player : MonoBehaviour {
         isPlayerTurn = true;
         monstersSummoned = 0;
         DrawCard();
+        hand.GetComponent<Hand>().OrderHand();
     }
 
     public void EndTurn()

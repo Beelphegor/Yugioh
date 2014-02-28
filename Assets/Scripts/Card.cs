@@ -63,22 +63,16 @@ public class Card : MonoBehaviour {
 		isSelected = true;
 	}
 
-	public void moveCardToHand (Hand hand)
-	{
-		StartCoroutine (AnimateMovementToHand(hand));
-	}
+    public IEnumerator AnimateMovementOnHand(float xPosition, float yPosition)
+    {
+        var initialPosition = transform.position;
 
-	IEnumerator AnimateMovementToHand(Hand hand){
-		var initialPosition = transform.position;
-
-		for (float f = 0; f <= 1; f += 0.1f) {
-			transform.position = Vector3.Lerp (initialPosition, new Vector3 (hand.transform.position.x - transform.localScale.x*2 + transform.localScale.x * (hand.Cards.Count - 1) , hand.transform.position.y, 0), f);
-			yield return null;
-		}
-
-		var specificCardSprite = Resources.Load<Sprite>(cardMetadata.code);
-		transform.GetComponent<SpriteRenderer>().sprite = specificCardSprite;
-	}
+        for (float f = 0; f <= 1; f += 0.1f)
+        {
+            transform.position = Vector3.Lerp(initialPosition, new Vector3(xPosition, yPosition, 0), f);
+            yield return null;
+        }
+    }
 
 	public void moveCardToMonsterZone (Vector3 zonePosition)
 	{
@@ -114,5 +108,10 @@ public class Card : MonoBehaviour {
     public decimal GetMonstersNeededToSummon()
     {
         return cardMetadata.level < 5 ? 0 : cardMetadata.level < 7 ? 1 : 2;
+    }
+
+    public void OrderCard(float xPosition, float yPosition)
+    {
+        StartCoroutine(AnimateMovementOnHand(xPosition, yPosition));
     }
 }
