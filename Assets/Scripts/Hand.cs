@@ -6,15 +6,18 @@ public class Hand : MonoBehaviour
 {
     public GameObject leftLimit;
     public GameObject rightLimit;
-    public float leftValue;
-    public float rightValue; 
+    public float spaceForCards; 
 
 	public List<Card> Cards = new List<Card>();
 	// Use this for initialization
+    void Awake()
+    {
+        spaceForCards = rightLimit.transform.position.x - leftLimit.transform.position.x;
+    }
+
 	void Start ()
 	{
-	    leftValue = 0;
-	    rightValue = rightLimit.transform.position.x - leftLimit.transform.position.x;
+	    
 
 	}
 	
@@ -36,18 +39,14 @@ public class Hand : MonoBehaviour
 
     public void OrderHand()
     {
-        float distance = (float)(rightValue/Cards.Count);
+        float distance = spaceForCards / Cards.Count;
         int index = 0;
         foreach (Card card in Cards)
         {
-            float xPosition = leftLimit.transform.position.x + distance*index++;
+            float xPosition = leftLimit.transform.position.x + distance*index;
+
             card.OrderCard(xPosition, transform.position.y);
+            index++;
         }
     }
-
-	void OnMouseEnter(){
-		foreach (Card card in Cards) {
-			//Debug.Log ("your hand has " + card.cardMetadata.name + " cards" );
-		}
-	}
 }

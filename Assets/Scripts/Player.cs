@@ -28,6 +28,7 @@ public class Player : MonoBehaviour {
     public delegate void EventHandler();
 
     public event EventHandler InitialCardsDrawed;
+    public event EventHandler TurnFinished;
 
 	// Use this for initialization
 	void Start () {
@@ -43,18 +44,12 @@ public class Player : MonoBehaviour {
 
     public void DrawInitialCards()
     {
-        StartCoroutine(AnimateDrawInitialCards());
-    }
-
-    IEnumerator AnimateDrawInitialCards()
-    {
-        for (var i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
         {
             DrawCard();
-            yield return new WaitForSeconds(0.4f);
         }
-        InitialCardsDrawed();
         hand.GetComponent<Hand>().OrderHand();
+        //InitialCardsDrawed();
     }
 
     public void DrawCard(){
@@ -62,7 +57,7 @@ public class Player : MonoBehaviour {
 		card.SummonMonster += OnMonsterSummon;
 	    card.SacrificeMonster += OnSacrificeMonster;
 	    card.SacrificeMonsterSummon += OnSacrificeMonsterSummon;
-		hand.GetComponent<Hand>().Cards.Add (card);
+		hand.GetComponent<Hand>().Cards.Add(card);
         var specificCardSprite = Resources.Load<Sprite>(card.cardMetadata.code);
         card.transform.GetComponent<SpriteRenderer>().sprite = specificCardSprite;
 	}
@@ -71,10 +66,7 @@ public class Player : MonoBehaviour {
 	void Update () {
 	}
 
-	
-
-
-	void OnMonsterSummon(Card card){
+	public void OnMonsterSummon(Card card){
 		if (isPlayerTurn)
 		{
 		    cardToBeSummon = card;
@@ -158,7 +150,7 @@ public class Player : MonoBehaviour {
 		return monstersSummoned == 0 ;
 	}
 
-    public void StartTurn()
+    public virtual void StartTurn()
     {
         isPlayerTurn = true;
         monstersSummoned = 0;
@@ -166,8 +158,9 @@ public class Player : MonoBehaviour {
         hand.GetComponent<Hand>().OrderHand();
     }
 
-    public void EndTurn()
+    public virtual void EndTurn()
     {
 		isPlayerTurn = false;
+        TurnFinished();
     }
 }

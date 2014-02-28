@@ -1,4 +1,6 @@
 ﻿namespace Assets.Scripts.Cards{
+
+    //recordar arreglar los namespaces
     public class LOB000 : CardMetadata {
 		public LOB000(){
 			code = "LOB000";
@@ -20,8 +22,7 @@
 			level = 8;
 		}
 	}
-	
-	
+
 	public class LOB002 : CardMetadata {
 		public LOB002(){
 			code = "LOB002";

@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
-public class Card : MonoBehaviour {
+public class Card : MonoBehaviour
+{
 
+    public string code;
 	public CardMetadata cardMetadata;
 	public delegate void Summon(Card g);
 	public event Summon SummonMonster;
@@ -17,17 +20,20 @@ public class Card : MonoBehaviour {
     public bool doneSacrification;
     public bool markedToSacrifice;
 
+
 	// Use this for initialization
 	void Start () {
 		isSelected = false;
 		isOnMonsterZone = false;
 		isSacrificeable = false;
+	    code = cardMetadata.code;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
 	}
+
 	void OnGUI()
 	{
 		float buttonHeight = 25;
@@ -63,16 +69,7 @@ public class Card : MonoBehaviour {
 		isSelected = true;
 	}
 
-    public IEnumerator AnimateMovementOnHand(float xPosition, float yPosition)
-    {
-        var initialPosition = transform.position;
-
-        for (float f = 0; f <= 1; f += 0.1f)
-        {
-            transform.position = Vector3.Lerp(initialPosition, new Vector3(xPosition, yPosition, 0), f);
-            yield return null;
-        }
-    }
+    
 
 	public void moveCardToMonsterZone (Vector3 zonePosition)
 	{
@@ -113,5 +110,16 @@ public class Card : MonoBehaviour {
     public void OrderCard(float xPosition, float yPosition)
     {
         StartCoroutine(AnimateMovementOnHand(xPosition, yPosition));
+    }
+
+    IEnumerator AnimateMovementOnHand(float xPosition, float yPosition)
+    {
+        var initialPosition = transform.position;
+        //preguntar por que cojones pasa esto en stack overflow
+        for (float f = 0; f <= 1.2; f += 0.1f)
+        {
+            transform.position = Vector3.Lerp(initialPosition, new Vector3(xPosition, yPosition, 0), f);
+            yield return null;
+        }
     }
 }

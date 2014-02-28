@@ -13,18 +13,19 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        Player1.GetComponent<Player>().InitialCardsDrawed += OnInitialCardsDrawedByPlayer1;
-        Player2.GetComponent<Player>().InitialCardsDrawed += OnInitialCardsDrawedByPlayer2;
+        Player1.GetComponent<Player>().TurnFinished += Player1TurnFinished;
+        Player2.GetComponent<Player>().TurnFinished += BotTurnFinished;
     }
 
-    void OnInitialCardsDrawedByPlayer1()
+    void Player1TurnFinished()
     {
-        Player2.GetComponent<Player>().DrawInitialCards();
+        Debug.Log("player turn finished");
     }
 
-    void OnInitialCardsDrawedByPlayer2()
+    void BotTurnFinished()
     {
-        SetPlayersTurn();
+        Debug.Log("bot turn finished");
+        Player1.GetComponent<Player>().StartTurn();
     }
 
     // Use this for initialization
@@ -47,37 +48,25 @@ public class GameManager : MonoBehaviour
     void DrawInitialCards()
     {
         Player1.GetComponent<Player>().DrawInitialCards();
+        Player2.GetComponent<Player>().DrawInitialCards();
+        Player1.GetComponent<Player>().StartTurn();
     }
 
     void OnGUI()
     {
         float buttonHeight = 25;
-        float buttonWidth = 40;
+        float buttonWidth = 120;
 
         Vector3 recCoordinates = Camera.main.WorldToScreenPoint(transform.position);
         var buttonRect = new Rect(recCoordinates.x, Screen.height - recCoordinates.y, buttonWidth, buttonHeight);
-        if (GUI.Button(buttonRect, "Next"))
-        {
-            SetPlayersTurn();
-        }
-    }
-
-    void SetPlayersTurn()
-    {
-        TurnNumber++;
-        if (!Player1.GetComponent<Player>().isPlayerTurn)
-        {
-            Player1.GetComponent<Player>().StartTurn();
-            Player2.GetComponent<Player>().EndTurn();
-        }
-        else
+        if (GUI.Button(buttonRect, Player1.GetComponent<Player>().isPlayerTurn ? "EndTurn" : "IsNotYourTurn" ))
         {
             Player1.GetComponent<Player>().EndTurn();
             Player2.GetComponent<Player>().StartTurn();
         }
     }
 
-    //clase!
+    //hacer esto clase!
     public List<CardMetadata> GenerateCards()
     {
 
@@ -89,7 +78,7 @@ public class GameManager : MonoBehaviour
 
         foreach (var type in runningAssembly.GetTypes())
         {
-            if (typeOfCardMetadata.IsAssignableFrom(type))
+            if (typeOfCardMetadata.IsAssignableFrom(type) && type.Name != "CardMetadata")
                 allCardMetadataTypes.Add(type);
         }
 
