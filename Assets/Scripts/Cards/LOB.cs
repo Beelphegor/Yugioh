@@ -1,13 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
-namespace LOB{
-	public class LOB000 : CardMetadata {
+﻿namespace Assets.Scripts.Cards{
+    public class LOB000 : CardMetadata {
 		public LOB000(){
 			code = "LOB000";
 			name = "Tri-Horned Dragon";
 			attack = 2850;
 			defense = 2350;
-			cardType = "Normal monster";
+			cardType = CartType.NormalMonster;
 			level = 8;
 		}
 	}
@@ -18,7 +16,7 @@ namespace LOB{
 			name = "Blue-Eyes White Dragon";
 			attack = 3000;
 			defense = 2500;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 8;
 		}
 	}
@@ -30,7 +28,7 @@ namespace LOB{
 			name = "Hitotsu-Me Giant";
 			attack = 1200;
 			defense = 1000;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 4;
 		}
 	}
@@ -41,7 +39,7 @@ namespace LOB{
 			name = "Flame Swordsman";
 			attack = 1800;
 			defense = 1600;
-			cardType = "Fusion monster";
+			cardType = CartType.FusionMonster;
 			level = 5;
 		}
 	}
@@ -52,7 +50,7 @@ namespace LOB{
 			name = "Skull Servant";
 			attack = 300;
 			defense = 200;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 1;
 		}
 	}
@@ -63,7 +61,7 @@ namespace LOB{
 			name = "Dark Magician";
 			attack = 2500;
 			defense = 2100;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 7;
 		}
 	}
@@ -74,7 +72,7 @@ namespace LOB{
 			name = "Gaia the Fierce Knight";
 			attack = 2300;
 			defense = 2100;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 7;
 		}
 	}
@@ -85,7 +83,7 @@ namespace LOB{
 			name = "Celtic Guardian";
 			attack = 1400 ;
 			defense = 1200;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 4;
 		}
 	}
@@ -96,7 +94,7 @@ namespace LOB{
 			name = "Basic Insect";
 			attack = 500 ;
 			defense = 700;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 2;
 		}
 	}
@@ -107,7 +105,7 @@ namespace LOB{
 			name = "Mammoth Graveyard";
 			attack = 1200;
 			defense = 800;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 3;
 		}
 	}
@@ -118,7 +116,7 @@ namespace LOB{
 			name = "Silver Fang";
 			attack = 1200;
 			defense = 800;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 3;
 		}
 	}
@@ -129,7 +127,7 @@ namespace LOB{
 			name = "Dark Gray";
 			attack = 800;
 			defense = 900;
-			cardType = "Normal monster";
+			cardType = CartType.NormalMonster;
 			level = 3;
 		}
 	}
@@ -140,7 +138,7 @@ namespace LOB{
 			name = "Trial of Nightmare";
 			attack = 1300;
 			defense = 900;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 4;
 		}
 	}
@@ -151,7 +149,7 @@ namespace LOB{
 			name = "Nemuriko";
 			attack = 800;
 			defense = 700;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 3;
 		}
 	}
@@ -162,7 +160,7 @@ namespace LOB{
 			name = "The 13th Grave";
 			attack = 1200;
 			defense = 900;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 3;
 		}
 	}
@@ -173,7 +171,7 @@ namespace LOB{
 			name = "Charubin the Fire Knight";
 			attack = 1100;
 			defense = 800;
-			cardType = "Normal monster";
+            cardType = CartType.FusionMonster;
 			level = 3;
 		}
 	}
@@ -184,7 +182,7 @@ namespace LOB{
 			name = "Flame Manipulator";
 			attack = 900;
 			defense = 1000;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 3;
 		}
 	}
@@ -195,7 +193,7 @@ namespace LOB{
 			name = "Monster Egg";
 			attack = 600;
 			defense = 900;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 3;
 		}
 	}
@@ -206,7 +204,7 @@ namespace LOB{
 			name = "Firegrass";
 			attack = 700;
 			defense = 600;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 2;
 		}
 	}
@@ -217,7 +215,7 @@ namespace LOB{
 			name = "Darkfire Dragon";
 			attack = 1500;
 			defense = 1250;
-			cardType = "Normal monster";
+            cardType = CartType.FusionMonster;
 			level = 4;
 		}
 	}
@@ -228,7 +226,7 @@ namespace LOB{
 			name = "Dark King of the Abyss";
 			attack = 1200;
 			defense = 800;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 3;
 		}
 	}
@@ -239,9 +237,242 @@ namespace LOB{
 			name = "Fiend Reflection #2";
 			attack = 1100;
 			defense = 1400;
-			cardType = "Normal monster";
+            cardType = CartType.NormalMonster;
 			level = 4;
 		}
 	}
 
+    public class LOB022 : CardMetadata
+    {
+        public LOB022()
+        {
+            code = "LOB022";
+            name = "Fusionist";
+            attack = 900;
+            defense = 700;
+            cardType = CartType.FusionMonster;
+            level = 3;
+        }
+    }
+
+    public class LOB023 : CardMetadata
+    {
+        public LOB023()
+        {
+            code = "LOB023";
+            name = "Turtle Tiger";
+            attack = 1000;
+            defense = 1500;
+            cardType = CartType.NormalMonster;
+            level = 4;
+        }
+    }
+
+    public class LOB024 : CardMetadata
+    {
+        public LOB024()
+        {
+            code = "LOB024";
+            name = "Petit Dragon";
+            attack = 600;
+            defense = 700;
+            cardType = CartType.NormalMonster;
+            level = 2;
+        }
+    }
+
+    public class LOB025 : CardMetadata
+    {
+        public LOB025()
+        {
+            code = "LOB025";
+            name = "Petit Angel";
+            attack = 600;
+            defense = 900;
+            cardType = CartType.NormalMonster;
+            level = 3;
+        }
+    }
+
+    public class LOB026 : CardMetadata
+    {
+        public LOB026()
+        {
+            code = "LOB026";
+            name = "Hinotama Soul";
+            attack = 600;
+            defense = 500;
+            cardType = CartType.NormalMonster;
+            level = 2;
+        }
+    }
+
+    public class LOB027 : CardMetadata
+    {
+        public LOB027()
+        {
+            code = "LOB027";
+            name = "Aqua Madoor";
+            attack = 1200;
+            defense = 2000;
+            cardType = CartType.NormalMonster;
+            level = 4;
+        }
+    }
+
+    public class LOB028 : CardMetadata
+    {
+        public LOB028()
+        {
+            code = "LOB028";
+            name = "Kagemusha of the Blue Flame";
+            attack = 800;
+            defense = 400;
+            cardType = CartType.NormalMonster;
+            level = 2;
+        }
+    }
+
+    public class LOB029 : CardMetadata
+    {
+        public LOB029()
+        {
+            code = "LOB029";
+            name = "Flame Ghost";
+            attack = 1000;
+            defense = 800;
+            cardType = CartType.FusionMonster;
+            level = 3;
+        }
+    }
+
+    public class LOB030 : CardMetadata
+    {
+        public LOB030()
+        {
+            code = "LOB030";
+            name = "Two-Mouth Darkruler";
+            attack = 900;
+            defense = 700;
+            cardType = CartType.NormalMonster;
+            level = 3;
+        }
+    }
+
+    public class LOB031 : CardMetadata
+    {
+        public LOB031()
+        {
+            code = "LOB031";
+            name = "Dissolverock";
+            attack = 900;
+            defense = 100;
+            cardType = CartType.NormalMonster;
+            level = 3;
+        }
+    }
+
+    public class LOB032 : CardMetadata
+    {
+        public LOB032()
+        {
+            code = "LOB032";
+            name = "Root Water";
+            attack = 900;
+            defense = 800;
+            cardType = CartType.NormalMonster;
+            level = 3;
+        }
+    }
+
+    public class LOB033 : CardMetadata
+    {
+        public LOB033()
+        {
+            code = "LOB033";
+            name = "The Furious Sea King";
+            attack = 800;
+            defense = 700;
+            cardType = CartType.NormalMonster;
+            level = 3;
+        }
+    }
+
+    public class LOB034 : CardMetadata
+    {
+        public LOB034()
+        {
+            code = "LOB034";
+            name = "Green Phantom King";
+            attack = 500;
+            defense = 1600;
+            cardType = CartType.NormalMonster;
+            level = 3;
+        }
+    }
+
+    public class LOB035 : CardMetadata
+    {
+        public LOB035()
+        {
+            code = "LOB035";
+            name = "Ray & Temperature";
+            attack = 1000;
+            defense = 1000;
+            cardType = CartType.NormalMonster;
+            level = 3;
+        }
+    }
+
+    public class LOB036 : CardMetadata
+    {
+        public LOB036()
+        {
+            code = "LOB036";
+            name = "King Fog";
+            attack = 1000;
+            defense = 900;
+            cardType = CartType.NormalMonster;
+            level = 3;
+        }
+    }
+
+    public class LOB037 : CardMetadata
+    {
+        public LOB037()
+        {
+            code = "LOB037";
+            name = "Mystical Sheep #2";
+            attack = 800;
+            defense = 1000;
+            cardType = CartType.NormalMonster;
+            level = 3;
+        }
+    }
+
+    public class LOB038 : CardMetadata
+    {
+        public LOB038()
+        {
+            code = "LOB038";
+            name = "Masaki the Legendary Swordsman";
+            attack = 1100;
+            defense = 1100;
+            cardType = CartType.NormalMonster;
+            level = 4;
+        }
+    }
+
+    public class LOB039 : CardMetadata
+    {
+        public LOB039()
+        {
+            code = "LOB039";
+            name = "Kurama";
+            attack = 800;
+            defense = 800;
+            cardType = CartType.NormalMonster;
+            level = 3;
+        }
+    }
 }

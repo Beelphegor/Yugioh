@@ -28,21 +28,12 @@ public class Deck : MonoBehaviour {
 		return drawedCard;
 	}
 
-	public void CreateDeckForPlayerOne (List<CardMetadata> cardMetadataList)
+	public void CreateDeck (List<CardMetadata> cardMetadataList)
 	{
 		foreach(var cardMetadata in cardMetadataList){
 			var card = ((GameObject)Instantiate(CardPrefab, transform.position, Quaternion.Euler(new Vector3()))).GetComponent<Card>();
 			card.cardMetadata = cardMetadata;
 			card.isFirstPlayerCard = true;
-			Cards.Add (card);
-		}
-	}
-	public void CreateDeckForPlayerTwo (List<CardMetadata> cardMetadataList)
-	{
-		foreach(var cardMetadata in cardMetadataList){
-			var card = ((GameObject)Instantiate(CardPrefab, transform.position, Quaternion.Euler(new Vector3()))).GetComponent<Card>();
-			card.cardMetadata = cardMetadata;
-			card.isFirstPlayerCard = false;
 			Cards.Add (card);
 		}
 	}

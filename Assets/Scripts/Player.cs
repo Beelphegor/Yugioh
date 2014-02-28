@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Cards;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,10 @@ public class Player : MonoBehaviour {
     public List<Card> cardsToSacrifice;
     public Card cardToBeSummon;
 
+    public delegate void EventHandler();
+
+    public event EventHandler InitialCardsDrawed;
+
 	// Use this for initialization
 	void Start () {
         cardsToSacrifice = new List<Card>();
@@ -34,20 +39,24 @@ public class Player : MonoBehaviour {
 			monsterZone4,
 			monsterZone5
 		};
-		var cards = GenerateCards ();
-		deck.GetComponent<Deck> ().CreateDeckForPlayerOne (cards.Where(x => x.cardType == "Normal monster").ToList());
-		fusionMonsterZone.GetComponent<FusionMonsterZone>().CreateDeck (cards.Where(x => x.cardType == "Fusion monster").ToList());
-		StartCoroutine ("DrawInitialCards");
 	}
 
-	IEnumerator DrawInitialCards(){
-		for (int i = 0; i < 5; i++) {
-			DrawCard();
-			yield return new WaitForSeconds(0.4f);
-		}
-	}
+    public void DrawInitialCards()
+    {
+        StartCoroutine(AnimateDrawInitialCards());
+    }
 
-	void DrawCard(){
+    IEnumerator AnimateDrawInitialCards()
+    {
+        for (var i = 0; i < 5; i++)
+        {
+            DrawCard();
+            yield return new WaitForSeconds(0.4f);
+        }
+        InitialCardsDrawed();
+    }
+
+    public void DrawCard(){
 		Card card = deck.GetComponent<Deck>().Draw();
 		card.SummonMonster += OnMonsterSummon;
 	    card.SacrificeMonster += OnSacrificeMonster;
@@ -58,36 +67,9 @@ public class Player : MonoBehaviour {
 
     // Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown("d")){
-			if(isPlayerTurn){
-				DrawCard();
-			} 
-		}
 	}
 
-	public List<CardMetadata> GenerateCards(){
-
-		var randomCardList = new List<CardMetadata> ();
-
-		var runningAssembly = Assembly.GetExecutingAssembly ();
-		var typeOfCardMetadata = typeof(CardMetadata);
-		var allCardMetadataTypes = new List<Type>();
-
-		foreach (var type in runningAssembly.GetTypes())
-		{
-			if (typeOfCardMetadata.IsAssignableFrom(type))
-				allCardMetadataTypes.Add(type);
-		}
-
-		for (int i = 0; i < 50; i++) {
-			var theRandomIndex = (int)(UnityEngine.Random.value * allCardMetadataTypes.Count);			
-			var selectedType = allCardMetadataTypes[theRandomIndex];			
-			var selected = (CardMetadata)Activator.CreateInstance(selectedType);
-			randomCardList.Add(selected);
-		}
-
-		return randomCardList;
-	}
+	
 
 
 	void OnMonsterSummon(Card card){
@@ -128,12 +110,14 @@ public class Player : MonoBehaviour {
         monstersSummoned++;
         card.cardWasMeantToBeSummon = false;
         cardsOnMonsterZone.Add(card);
-        card.isOnMonsterZone = true;
+        card.isOnMonsterZone = true; //mejor si preguntamos al field si tiene esta carta
         var availableMonsterZone = monsterZones.First(x => x.GetComponent<MonsterZone>().isAvailable);
         availableMonsterZone.GetComponent<MonsterZone>().isAvailable = false;
+        hand.GetComponent<Hand>().Cards.Remove(card);
         card.moveCardToMonsterZone(availableMonsterZone.transform.position);
         Debug.Log("click en: " + card.cardMetadata.name);
         cardToBeSummon = null;
+        Debug.Log("cartas en la mano: " + hand.GetComponent<Hand>().Cards.Count);
     }
 
     private void OnSacrificeMonster(Card card)
@@ -171,4 +155,16 @@ public class Player : MonoBehaviour {
 	bool isAllowedToSummonMonster(Card card){
 		return monstersSummoned == 0 ;
 	}
+
+    public void StartTurn()
+    {
+        isPlayerTurn = true;
+        monstersSummoned = 0;
+        DrawCard();
+    }
+
+    public void EndTurn()
+    {
+		isPlayerTurn = false;
+    }
 }

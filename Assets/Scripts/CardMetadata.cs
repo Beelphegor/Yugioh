@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Assets.Scripts.Cards;
 
 public class CardMetadata {
 	public string code;
@@ -9,7 +8,7 @@ public class CardMetadata {
 	public string type;
 	public string attribute;
 	public int level;
-	public string cardType;
+	public CartType cardType;
 	public string cardText;
 	public string rarity;
 }
