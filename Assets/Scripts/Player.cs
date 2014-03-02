@@ -61,7 +61,7 @@ public class Player : MonoBehaviour {
 	void Update () {
 	}
 
-	public void OnMonsterSummon(Card card){
+	public virtual void OnMonsterSummon(Card card){
 
         Debug.Log("on monster summon");
 		if (isPlayerTurn)
@@ -94,7 +94,7 @@ public class Player : MonoBehaviour {
         return monstersSummonedOnTurn == 0;
     }
 
-    private void OnSacrificeMonsterSummon(Card card)
+    public virtual void OnSacrificeMonsterSummon(Card card)
     {
         cardsToSacrifice = new List<Card>();
         var monstersOnField = field.GetComponent<Field>().Monsters();
@@ -113,7 +113,7 @@ public class Player : MonoBehaviour {
         SummonMonster(card);
     }
 
-    private void SummonMonster(Card card)
+    protected void SummonMonster(Card card)
     {
         monstersSummonedOnTurn++;
         card.cardWasMeantToBeSummon = false;
