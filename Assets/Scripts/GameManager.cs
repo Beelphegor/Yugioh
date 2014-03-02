@@ -9,23 +9,41 @@ public class GameManager : MonoBehaviour
 {
     public GameObject Player1;
     public GameObject Player2;
+    public GameObject CurrentPlayer;
+    public GameObject OtherPlayer;
     public int TurnNumber = 0;
 
     void Awake()
     {
         Player1.GetComponent<Player>().TurnFinished += Player1TurnFinished;
         Player2.GetComponent<Player>().TurnFinished += BotTurnFinished;
+        CurrentPlayer = Player1;
+        OtherPlayer = Player2;
     }
 
     void Player1TurnFinished()
     {
         Debug.Log("player turn finished");
+        CurrentPlayer = Player2;
+        OtherPlayer = Player1;
+        TurnNumber++;
+        if (TurnNumber > 0)
+        {
+            Player1.GetComponent<Player>().isFirstTurn = false;
+        }
     }
 
     void BotTurnFinished()
     {
         Debug.Log("bot turn finished");
         Player1.GetComponent<Player>().StartTurn();
+        CurrentPlayer = Player1;
+        OtherPlayer = Player2;
+        TurnNumber++;
+        if (TurnNumber > 1)
+        {
+            Player2.GetComponent<Player>().isFirstTurn = false;
+        }
     }
 
     // Use this for initialization

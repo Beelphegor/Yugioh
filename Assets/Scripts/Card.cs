@@ -12,6 +12,8 @@ public class Card : MonoBehaviour
     public event EventHandler SummonMonster;
     public event EventHandler SacrificeMonster;
     public event EventHandler SacrificeMonsterSummon;
+    public event EventHandler AttackMonster;
+    public event EventHandler BeingAttacked;
 	public bool isSelected;
 	public bool isFirstPlayerCard;
 	public bool isOnMonsterZone;
@@ -19,13 +21,13 @@ public class Card : MonoBehaviour
     public bool cardWasMeantToBeSummon;
     public bool doneSacrification;
     public bool markedToSacrifice;
+    public bool isAbleToAttack;
+    public bool canBeAttacked;
+    public bool alreadyAttacked;
 
 
 	// Use this for initialization
 	void Start () {
-		isSelected = false;
-		isOnMonsterZone = false;
-		isSacrificeable = false;
 	    code = cardMetadata.code;
 	}
 	
@@ -41,6 +43,20 @@ public class Card : MonoBehaviour
 
 		var recCoordinates = Camera.main.WorldToScreenPoint(transform.position);
 		Rect buttonRect = new Rect(recCoordinates.x, Screen.height - recCoordinates.y, buttonWidth, buttonHeight);
+	    if (canBeAttacked)
+	    {
+            if (GUI.Button(buttonRect, "2"))
+            {
+                BeingAttacked(this);
+            }
+	    }
+        if (isAbleToAttack && !alreadyAttacked)
+        {
+            if (GUI.Button(buttonRect, "1"))
+            {
+                AttackMonster(this);
+            }
+        }
 		if (isSelected && !isOnMonsterZone) {
 			if (GUI.Button (buttonRect, "S"))
 			{

@@ -9,22 +9,31 @@ using System;
 public class Player : MonoBehaviour {
     //pasar los monsterzones al field, y el graveyard tambien O.0 creooo
 	public GameObject hand;
+    public GameObject opponent;
 	public GameObject deck;
     public GameObject field;
 	public GameObject fusionMonsterZone;
     public GameObject graveyard;
+    public GameObject actionsMenu;
 	public bool isPlayerTurn;
 	public int monstersSummonedOnTurn;
 	public List<Card> cardsOnMonsterZone;// no seguro si esto va aqui
 	public List<Card> cardsOnGraveyard;
     public List<Card> cardsToSacrifice;
     public Card cardToBeSummon;
+    public Card cardToBeAttacked;
+    public Card attackingCard;
     public delegate void EventHandler();
     public event EventHandler InitialCardsDrawed;
     public event EventHandler TurnFinished;
+    public bool isFirstTurn;
+    public int lifePoints;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
+	    isFirstTurn = true;
+	    lifePoints = 8000;
         cardsToSacrifice = new List<Card>();
 	}
 
@@ -43,10 +52,87 @@ public class Player : MonoBehaviour {
 	    card.SacrificeMonster += OnSacrificeMonster;
         card.SelectCard += OnSelectCard;
 	    card.SacrificeMonsterSummon += OnSacrificeMonsterSummon;
+        card.AttackMonster += OnAttackMonster;
 		hand.GetComponent<Hand>().Cards.Add(card);
         var specificCardSprite = Resources.Load<Sprite>(card.cardMetadata.code);
         card.transform.GetComponent<SpriteRenderer>().sprite = specificCardSprite;
 	}
+
+    void OnGUI()
+    {
+        float buttonHeightA = 25;
+        float buttonWidthA = 25;
+        var recPlayerCoordinates = Camera.main.WorldToScreenPoint(actionsMenu.transform.position);
+        var actionButton = new Rect(recPlayerCoordinates.x, Screen.height - recPlayerCoordinates.y, buttonWidthA, buttonHeightA);
+        if (isPlayerTurn && !isFirstTurn)
+        {
+            if (GUI.Button(actionButton, "A"))
+            {
+                var cards = field.GetComponent<Field>().Monsters();
+                foreach (Card card in cards)
+                {
+                    card.isAbleToAttack = true;
+                }
+            }
+        }
+
+        var lifePointButton = new Rect(recPlayerCoordinates.x, Screen.height - recPlayerCoordinates.y - 40, 40, 25);
+        GUI.Button(lifePointButton, "" + lifePoints);
+    }
+
+    private void OnBeingAttacked(Card card)
+    {
+        attackingCard.isAbleToAttack = false;
+        attackingCard.alreadyAttacked = true;
+        card.canBeAttacked = false;
+        if (attackingCard.cardMetadata.attack > card.cardMetadata.attack)
+        {
+            opponent.GetComponent<Player>().field.GetComponent<Field>().RemoveMonsters(card);
+            opponent.GetComponent<Player>().cardsOnGraveyard.Add(card);
+            card.moveCardToGraveyard(opponent.GetComponent<Player>().graveyard.transform.position);
+            opponent.GetComponent<Player>().lifePoints -= (attackingCard.cardMetadata.attack - card.cardMetadata.attack);
+        }
+        else if (attackingCard.cardMetadata.attack < card.cardMetadata.attack)
+        {
+            field.GetComponent<Field>().RemoveMonsters(attackingCard);
+            cardsOnGraveyard.Add(attackingCard);
+            attackingCard.moveCardToGraveyard(graveyard.transform.position);
+            lifePoints -= (card.cardMetadata.attack - attackingCard.cardMetadata.attack);
+        }
+        else
+        {
+            field.GetComponent<Field>().RemoveMonsters(attackingCard);
+            cardsOnGraveyard.Add(attackingCard);
+            attackingCard.moveCardToGraveyard(graveyard.transform.position);
+
+            opponent.GetComponent<Player>().field.GetComponent<Field>().RemoveMonsters(card);
+            opponent.GetComponent<Player>().cardsOnGraveyard.Add(card);
+            card.moveCardToGraveyard(opponent.GetComponent<Player>().graveyard.transform.position);
+        }
+        var opponentCards = opponent.GetComponent<Player>().field.GetComponent<Field>().Monsters();
+        foreach (Card opponetCard in opponentCards)
+        {
+            opponetCard.canBeAttacked = false;
+            opponetCard.BeingAttacked += null;
+        }
+    }
+
+    private void OnAttackMonster(Card card)
+    {
+        attackingCard = card;
+        var opponentCards = opponent.GetComponent<Player>().field.GetComponent<Field>().Monsters();
+        foreach (Card opponetCard in opponentCards)
+        {
+            opponetCard.canBeAttacked = true;
+            opponetCard.BeingAttacked += OnBeingAttacked;
+        }
+        var cards = field.GetComponent<Field>().Monsters();
+        foreach (Card fieldCard in cards)
+        {
+            if(fieldCard != attackingCard)
+                fieldCard.isAbleToAttack = false;
+        }
+    }
 
     private void OnSelectCard(Card card)
     {
@@ -159,6 +245,11 @@ public class Player : MonoBehaviour {
         isPlayerTurn = true;
         monstersSummonedOnTurn = 0;
         DrawCard();
+        var cards = field.GetComponent<Field>().Monsters();
+        foreach (Card card in cards)
+        {
+            card.alreadyAttacked = false;
+        }
         hand.GetComponent<Hand>().OrderHand();
     }
 
