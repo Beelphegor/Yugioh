@@ -2,10 +2,10 @@
 using System.Collections;
 
 public class MonsterZone : MonoBehaviour {
-	public bool isAvailable;
+	public bool IsAvailable;
 
 	void Awake(){
-		//isAvailable = true;
+        IsAvailable = true;
 	}
 
 	// Use this for initialization
@@ -16,4 +16,20 @@ public class MonsterZone : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public void AddMonster(Card card)
+    {
+        Monster = card;
+        IsAvailable = false;
+        card.moveCardToMonsterZone(transform.position);
+        card.isOnMonsterZone = true;
+    }
+
+    public Card Monster { get; set; }
+
+    public void RemoveMonster()
+    {
+        IsAvailable = true;
+        Monster = null;
+    }
 }

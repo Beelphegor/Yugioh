@@ -7,39 +7,25 @@ using System.Reflection;
 using System;
 
 public class Player : MonoBehaviour {
+    //pasar los monsterzones al field, y el graveyard tambien O.0 creooo
 	public GameObject hand;
 	public GameObject deck;
+    public GameObject field;
 	public GameObject fusionMonsterZone;
-	public GameObject field;
-	public GameObject monsterZone1;
-	public GameObject monsterZone2;
-	public GameObject monsterZone3;
-	public GameObject monsterZone4;
-	public GameObject monsterZone5;
     public GameObject graveyard;
-	public List<GameObject> monsterZones;
 	public bool isPlayerTurn;
-	public int monstersSummoned;
-	public List<Card> cardsOnMonsterZone;
+	public int monstersSummonedOnTurn;
+	public List<Card> cardsOnMonsterZone;// no seguro si esto va aqui
 	public List<Card> cardsOnGraveyard;
     public List<Card> cardsToSacrifice;
     public Card cardToBeSummon;
-
     public delegate void EventHandler();
-
     public event EventHandler InitialCardsDrawed;
     public event EventHandler TurnFinished;
 
 	// Use this for initialization
 	void Start () {
         cardsToSacrifice = new List<Card>();
-		monsterZones = new List<GameObject>(){
-			monsterZone1,
-			monsterZone2,
-			monsterZone3,
-			monsterZone4,
-			monsterZone5
-		};
 	}
 
     public void DrawInitialCards()
@@ -49,7 +35,6 @@ public class Player : MonoBehaviour {
             DrawCard();
         }
         hand.GetComponent<Hand>().OrderHand();
-        //InitialCardsDrawed();
     }
 
     public void DrawCard(){
@@ -67,16 +52,22 @@ public class Player : MonoBehaviour {
 	}
 
 	public void OnMonsterSummon(Card card){
+
+        Debug.Log("on monster summon");
 		if (isPlayerTurn)
 		{
 		    cardToBeSummon = card;
 			if( isAllowedToSummonMonster (card)) {			
 				if( isLowLevelCard(card)){
 					SummonMonster(card);
-				} else if(isMediumLevelCard(card) && cardsOnMonsterZone.Count > 0) {
-					AskForSacrifice(1, card);
-				} else if(isHighLevelCard(card) && cardsOnMonsterZone.Count > 1){
-					AskForSacrifice(2, card);
+                }
+                else if (isMediumLevelCard(card) && field.GetComponent<Field>().Monsters().Count > 0)
+                {
+					AskForSacrifice(card);
+                }
+                else if (isHighLevelCard(card) && field.GetComponent<Field>().Monsters().Count > 1)
+                {
+					AskForSacrifice(card);
 				} else {
 					Debug.Log ("cannot summon that monster");
 				    cardToBeSummon = null;
@@ -88,30 +79,31 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+    bool isAllowedToSummonMonster(Card card)
+    {
+        return monstersSummonedOnTurn == 0;
+    }
+
     private void OnSacrificeMonsterSummon(Card card)
     {
         SummonMonster(card);
-        foreach (Card sacrificedCard in cardsOnMonsterZone.Where(x => x.markedToSacrifice).ToList())
+        var monstersOnField = field.GetComponent<Field>().Monsters();
+        foreach (Card sacrificedCard in monstersOnField.Where(x => x.markedToSacrifice).ToList())
         {
-            cardsOnMonsterZone.Remove(sacrificedCard);
-            cardsOnGraveyard.Add(sacrificedCard);
-            sacrificedCard.moveCardToGraveyard(graveyard.transform.position);
+            Debug.Log("deberia de quitar esta carta: " + sacrificedCard.cardMetadata.name);
+            field.GetComponent<Field>().RemoveMonsters(sacrificedCard);
+            cardsOnGraveyard.Add(sacrificedCard);//probable esto tenga que ser graveyard.sendMonster
+            sacrificedCard.moveCardToGraveyard(graveyard.transform.position);// probable esto tenga que ir en graveyard.sendMonster
         }
     }
 
     private void SummonMonster(Card card)
     {
-        monstersSummoned++;
+        monstersSummonedOnTurn++;
         card.cardWasMeantToBeSummon = false;
-        cardsOnMonsterZone.Add(card);
-        card.isOnMonsterZone = true; //mejor si preguntamos al field si tiene esta carta
-        var availableMonsterZone = monsterZones.First(x => x.GetComponent<MonsterZone>().isAvailable);
-        availableMonsterZone.GetComponent<MonsterZone>().isAvailable = false;
+        field.GetComponent<Field>().AddMonster(card);
         hand.GetComponent<Hand>().RemoveCard(card);
-        card.moveCardToMonsterZone(availableMonsterZone.transform.position);
-        Debug.Log("click en: " + card.cardMetadata.name);
         cardToBeSummon = null;
-        Debug.Log("cartas en la mano: " + hand.GetComponent<Hand>().Cards.Count);
     }
 
     private void OnSacrificeMonster(Card card)
@@ -120,7 +112,6 @@ public class Player : MonoBehaviour {
         {
             card.markedToSacrifice = true;
             cardsToSacrifice.Add(card);
-            monstersSummoned--;
             if (cardsToSacrifice.Count == cardToBeSummon.GetMonstersNeededToSummon())
             {
                 cardToBeSummon.doneSacrification = true;
@@ -128,10 +119,11 @@ public class Player : MonoBehaviour {
         }
     }
 
-	void AskForSacrifice(int quantityOfSacrificationsNeeded, Card card)
+	void AskForSacrifice(Card card)
 	{
 	    card.cardWasMeantToBeSummon = true;
-		foreach (Card cardOnMonsterZone in cardsOnMonsterZone) {
+        foreach (Card cardOnMonsterZone in field.GetComponent<Field>().Monsters())
+        {
 			cardOnMonsterZone.isSacrificeable = true;
 		}
 	}
@@ -146,14 +138,10 @@ public class Player : MonoBehaviour {
 		return card.cardMetadata.level > 6;
 	}
 
-	bool isAllowedToSummonMonster(Card card){
-		return monstersSummoned == 0 ;
-	}
-
     public virtual void StartTurn()
     {
         isPlayerTurn = true;
-        monstersSummoned = 0;
+        monstersSummonedOnTurn = 0;
         DrawCard();
         hand.GetComponent<Hand>().OrderHand();
     }

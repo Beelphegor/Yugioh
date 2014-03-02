@@ -42,7 +42,9 @@ public class Card : MonoBehaviour
 		var recCoordinates = Camera.main.WorldToScreenPoint(transform.position);
 		Rect buttonRect = new Rect(recCoordinates.x, Screen.height - recCoordinates.y, buttonWidth, buttonHeight);
 		if (isSelected && !isOnMonsterZone) {
-			if (GUI.Button (buttonRect, "S")) {
+			if (GUI.Button (buttonRect, "S"))
+			{
+			    Debug.Log("click en la s");
 				SummonMonster (this);
 				isSelected = false;
 			}
