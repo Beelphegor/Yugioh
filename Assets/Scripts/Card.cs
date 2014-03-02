@@ -7,11 +7,11 @@ public class Card : MonoBehaviour
 
     public string code;
 	public CardMetadata cardMetadata;
-	public delegate void Summon(Card g);
-	public event Summon SummonMonster;
-    public delegate void Sacrifice(Card g);
-    public event Sacrifice SacrificeMonster;
-    public event Summon SacrificeMonsterSummon;
+    public delegate void EventHandler(Card g);
+    public event EventHandler SelectCard;
+    public event EventHandler SummonMonster;
+    public event EventHandler SacrificeMonster;
+    public event EventHandler SacrificeMonsterSummon;
 	public bool isSelected;
 	public bool isFirstPlayerCard;
 	public bool isOnMonsterZone;
@@ -68,7 +68,7 @@ public class Card : MonoBehaviour
 	}
 	void OnMouseDown()
 	{
-		isSelected = true;
+	    SelectCard(this);
 	}
 
     

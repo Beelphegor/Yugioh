@@ -41,11 +41,21 @@ public class Player : MonoBehaviour {
 		Card card = deck.GetComponent<Deck>().Draw();
 		card.SummonMonster += OnMonsterSummon;
 	    card.SacrificeMonster += OnSacrificeMonster;
+        card.SelectCard += OnSelectCard;
 	    card.SacrificeMonsterSummon += OnSacrificeMonsterSummon;
 		hand.GetComponent<Hand>().Cards.Add(card);
         var specificCardSprite = Resources.Load<Sprite>(card.cardMetadata.code);
         card.transform.GetComponent<SpriteRenderer>().sprite = specificCardSprite;
 	}
+
+    private void OnSelectCard(Card card)
+    {
+        foreach (Card cardOnHand in hand.GetComponent<Hand>().Cards)
+        {
+            cardOnHand.isSelected = false;
+        }
+        card.isSelected = true;
+    }
 
     // Update is called once per frame
 	void Update () {
@@ -86,15 +96,21 @@ public class Player : MonoBehaviour {
 
     private void OnSacrificeMonsterSummon(Card card)
     {
-        SummonMonster(card);
+        cardsToSacrifice = new List<Card>();
         var monstersOnField = field.GetComponent<Field>().Monsters();
-        foreach (Card sacrificedCard in monstersOnField.Where(x => x.markedToSacrifice).ToList())
+        foreach (Card cards in monstersOnField)
         {
-            Debug.Log("deberia de quitar esta carta: " + sacrificedCard.cardMetadata.name);
-            field.GetComponent<Field>().RemoveMonsters(sacrificedCard);
-            cardsOnGraveyard.Add(sacrificedCard);//probable esto tenga que ser graveyard.sendMonster
-            sacrificedCard.moveCardToGraveyard(graveyard.transform.position);// probable esto tenga que ir en graveyard.sendMonster
+            if (cards.markedToSacrifice)
+            {
+                Debug.Log("deberia de quitar esta carta: " + cards.cardMetadata.name);
+                field.GetComponent<Field>().RemoveMonsters(cards);
+                cardsOnGraveyard.Add(cards); //probable esto tenga que ser graveyard.sendMonster
+                cards.moveCardToGraveyard(graveyard.transform.position);
+                    // probable esto tenga que ir en graveyard.sendMonster
+            }
+            cards.isSacrificeable = false;
         }
+        SummonMonster(card);
     }
 
     private void SummonMonster(Card card)

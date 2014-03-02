@@ -16,7 +16,8 @@ namespace Assets.Scripts
 
         void MakeDesition()
         {
-            OnMonsterSummon(hand.GetComponent<Hand>().Cards.First(x => x.cardMetadata.level <= 4));
+            if(field.GetComponent<Field>().Monsters().Count < 5)
+                OnMonsterSummon(hand.GetComponent<Hand>().Cards.First(x => x.cardMetadata.level <= 4));
         }
 
     }
