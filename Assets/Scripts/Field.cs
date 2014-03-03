@@ -54,7 +54,8 @@ public class Field : MonoBehaviour {
 
     public void RemoveMonsters(Card monsterToRemove)
     {
-        MonsterZones.First(x => x.GetComponent<MonsterZone>().Monster != null && 
-            x.GetComponent<MonsterZone>().Monster.Equals(monsterToRemove)).GetComponent<MonsterZone>().RemoveMonster();
+        var firstOrDefault = MonsterZones.FirstOrDefault(x => x.GetComponent<MonsterZone>().Monster != null && x.GetComponent<MonsterZone>().Monster.Equals(monsterToRemove));
+        if (firstOrDefault != null)
+            firstOrDefault.GetComponent<MonsterZone>().RemoveMonster();
     }
 }
